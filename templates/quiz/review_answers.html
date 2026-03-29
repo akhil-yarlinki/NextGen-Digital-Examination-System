@@ -1,0 +1,80 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="review-page">
+
+    <div class="review-header-card">
+        <div>
+            <h1 class="dashboard-title">
+                <i class="fa-solid fa-clipboard-check"></i> Review Answers
+            </h1>
+            <p class="subtitle">
+                Check pending short and long answers submitted by students.
+            </p>
+        </div>
+
+        <div class="pending-badge">
+            <i class="fa-solid fa-hourglass-half"></i>
+            Pending: {{ pending_answers|length }}
+        </div>
+    </div>
+
+    <div class="section-card review-section">
+        {% if pending_answers %}
+            <div class="answers-grid">
+                {% for ans in pending_answers %}
+                    <div class="answer-review-card">
+
+                        <div class="card-top">
+                            <div class="student-chip">
+                                <i class="fa-solid fa-user"></i>
+                                {{ ans.student.username }}
+                            </div>
+
+                            <div class="marks-chip">
+                                <i class="fa-solid fa-star"></i>
+                                Max: {{ ans.question.marks }}
+                            </div>
+                        </div>
+
+                        <div class="review-info-grid">
+                            <div class="mini-info-box">
+                                <span class="mini-label">Quiz</span>
+                                <p>{{ ans.quiz.title }}</p>
+                            </div>
+
+                            <div class="mini-info-box">
+                                <span class="mini-label">Type</span>
+                                <p>{{ ans.question.get_question_type_display }}</p>
+                            </div>
+                        </div>
+
+                        <div class="question-preview-box">
+                            <h3><i class="fa-solid fa-circle-question"></i> Question</h3>
+                            <p>{{ ans.question.question }}</p>
+                        </div>
+
+                        <div class="answer-preview-box">
+                            <h3><i class="fa-solid fa-file-lines"></i> Student Answer</h3>
+                            <p>{{ ans.answer_text|default:"No answer submitted." }}</p>
+                        </div>
+
+                        <a href="{% url 'grade_answer' ans.id %}" class="btn btn-success grade-btn">
+                            <i class="fa-solid fa-pen-to-square"></i> Grade Answer
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fa-solid fa-circle-check"></i>
+                <h3>No pending answers for review</h3>
+                <p>All short and long answers have been checked.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

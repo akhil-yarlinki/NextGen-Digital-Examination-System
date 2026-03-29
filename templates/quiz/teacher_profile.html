@@ -1,0 +1,27 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<div class="form-card premium-card">
+    <h2><i class="fa-solid fa-chalkboard-user"></i> Teacher Profile</h2>
+
+    {% if profile.profile_image %}
+        <img src="{{ profile.profile_image.url }}" width="120" height="120" style="border-radius:50%; object-fit:cover;">
+    {% endif %}
+
+    <p><strong>Username:</strong> {{ profile.user.username }}</p>
+    <p><strong>Email:</strong> {{ profile.user.email }}</p>
+    <p><strong>Phone:</strong> {{ profile.phone }}</p>
+    <p><strong>Subject:</strong> {{ profile.subject }}</p>
+    <p><strong>Qualification:</strong> {{ profile.qualification }}</p>
+    <p><strong>Address:</strong> {{ profile.address }}</p>
+
+<div style="margin-top:20px; display:flex; gap:10px;">
+    <a href="javascript:history.back()" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Go Back
+    </a>
+
+    <a href="{% url 'teacher-dashboard' %}" class="btn btn-primary">
+        <i class="fa-solid fa-house"></i> Dashboard
+    </a>
+</div>
+{% endblock %}

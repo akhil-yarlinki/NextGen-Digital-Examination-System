@@ -1,0 +1,89 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="hero-card hero-box">
+    <h2><i class="fa-solid fa-graduation-cap"></i> Welcome to NextGen Digital Examination System</h2>
+    <p>
+        A smart assessment platform that simplifies quiz management and delivers real-time performance
+        insights through an intuitive and scalable digital experience.
+    </p>
+
+    <div class="hero-buttons">
+        <a href="/studentlogin/" class="btn btn-primary">
+            <i class="fa-solid fa-user-graduate"></i> Student Login
+        </a>
+
+        <a href="/teacherlogin/" class="btn btn-warning">
+            <i class="fa-solid fa-chalkboard-user"></i> Teacher Login
+        </a>
+
+        <a href="/register/" class="btn btn-success">
+            <i class="fa-solid fa-user-plus"></i> Register Now
+        </a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+        <h3>Interactive Quizzes</h3>
+        <p class="small-text">
+            Attend quizzes in a smooth and user-friendly environment with a modern interface.
+        </p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h3>Track Performance</h3>
+        <p class="small-text">
+            Monitor scores, progress, and quiz activity with clear and beautiful dashboards.
+        </p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h3>Teacher Control</h3>
+        <p class="small-text">
+            Teachers can manage quizzes, review written answers, and track student performance.
+        </p>
+    </div>
+</div>
+
+<div class="section-card">
+    <h2 class="center"><i class="fa-solid fa-star"></i> Platform Highlights</h2>
+    <p class="subtitle">
+        Everything you need for a clean, professional, and interactive online quiz system.
+    </p>
+
+    <div class="quiz-grid">
+        <div class="quiz-card">
+            <h3><i class="fa-solid fa-clock"></i> Timed Quizzes</h3>
+            <p class="small-text">
+                Students can take quizzes with time limits and better exam-like experience.
+            </p>
+        </div>
+
+        <div class="quiz-card">
+            <h3><i class="fa-solid fa-pen"></i> Manual Grading</h3>
+            <p class="small-text">
+                Teachers can review short and long answers and assign marks professionally.
+            </p>
+        </div>
+
+        <div class="quiz-card">
+            <h3><i class="fa-solid fa-trophy"></i> Growth & Results</h3>
+            <p class="small-text">
+                Students can view results, improve performance, and stay motivated to learn.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="form-card premium-card student-login-card">
+
+        <!-- Header -->
+        <div class="login-header">
+
+            <div class="login-badge student-badge">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+
+            <h2>Student Login</h2>
+
+            <p class="small-text">
+                Access quizzes, view results, and continue your learning journey.
+            </p>
+
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="username" placeholder="Enter Username" required>
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Enter Password" required>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="btn btn-primary btn-full">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
+
+            <!-- Forgot Password -->
+            <div style="margin-top:14px;">
+                <a href="{% url 'password_reset' %}" class="btn btn-warning btn-full">
+                    <i class="fa-solid fa-key"></i> Forgot Password
+                </a>
+            </div>
+
+        </form>
+
+        <!-- Back to Home -->
+        <div class="login-footer">
+            <p>Go back to homepage</p>
+            <a href="/" class="home-link">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

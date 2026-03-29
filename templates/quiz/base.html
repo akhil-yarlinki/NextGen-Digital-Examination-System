@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Digital Examination System</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'quiz/style.css' %}">
+</head>
+<body>
+
+    <!-- Background bubbles -->
+    <div class="bg-bubble b1"></div>
+    <div class="bg-bubble b2"></div>
+    <div class="bg-bubble b3"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>NextGen Digital Examination System</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+
+            <a href="{% url 'studentlogin' %}">
+                <i class="fa-solid fa-user-graduate"></i> Student
+            </a>
+
+            <a href="{% url 'teacherlogin' %}">
+                <i class="fa-solid fa-chalkboard-user"></i> Teacher
+            </a>
+
+            <a href="{% url 'register' %}">
+                <i class="fa-solid fa-user-plus"></i> Register
+            </a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            {% endif %}
+
+            <button class="theme-btn" type="button" onclick="toggleTheme()">
+                <i class="fa-solid fa-circle-half-stroke"></i> Theme
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Theme Script -->
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute("data-theme");
+            const next = current === "dark" ? "light" : "dark";
+            html.setAttribute("data-theme", next);
+            localStorage.setItem("quiz_theme", next);
+        }
+
+        (function () {
+            const saved = localStorage.getItem("quiz_theme");
+            if (saved) {
+                document.documentElement.setAttribute("data-theme", saved);
+            }
+        })();
+    </script>
+
+</body>
+</html>

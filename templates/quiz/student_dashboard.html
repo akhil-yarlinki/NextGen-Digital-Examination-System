@@ -1,0 +1,209 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="student-dashboard">
+
+    <div class="hero-card dashboard-hero">
+        <div class="hero-content">
+            <h1 class="dashboard-title">
+                <i class="fa-solid fa-graduation-cap"></i> Student Dashboard
+            </h1>
+            <p class="subtitle">
+                Attend quizzes, track your results, and view your learning progress.
+            </p>
+
+            <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="{% url 'student-profile' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-user"></i> My Profile
+                </a>
+
+                <a href="{% url 'logout' %}" class="btn btn-secondary">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-badge">
+            <i class="fa-solid fa-bolt"></i> Learning Hub
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="error-message" style="margin-bottom: 20px;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="stats-grid premium-stats">
+        <div class="stat-card premium-card">
+            <div class="stat-icon"><i class="fa-solid fa-book-open"></i></div>
+            <h3>Available Quizzes</h3>
+            <p class="big">{{ quizzes|length }}</p>
+            <div class="small-text">Assigned to your class</div>
+        </div>
+
+        <div class="stat-card premium-card">
+            <div class="stat-icon"><i class="fa-solid fa-square-poll-vertical"></i></div>
+            <h3>Completed</h3>
+            <p class="big">{{ attempted_quiz_ids|length }}</p>
+            <div class="small-text">Finished quizzes</div>
+        </div>
+
+        <div class="stat-card premium-card">
+            <div class="stat-icon"><i class="fa-solid fa-trophy"></i></div>
+            <h3>My Results</h3>
+            <p class="big">{{ scores|length }}</p>
+            <div class="small-text">Tracked scores</div>
+        </div>
+    </div>
+
+    <div class="rank-grid">
+        <div class="rank-card premium-rank-card">
+            <div class="rank-badge">
+                <i class="fa-solid fa-crown"></i> Top Performer
+            </div>
+
+            <h3>Your Rank Card</h3>
+            <p class="small-text rank-text">
+                Keep attempting quizzes regularly to improve your performance.
+            </p>
+
+            <div class="progress-box">
+                <div class="progress-label">
+                    <span>Learning Progress</span>
+                    <span>82%</span>
+                </div>
+
+                <div class="progress custom-progress">
+                    <div class="progress-fill" style="width:82%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rank-card premium-rank-card">
+            <div class="rank-badge">
+                <i class="fa-solid fa-medal"></i> Achievement
+            </div>
+
+            <h3>Consistency Level</h3>
+            <p class="small-text rank-text">
+                Attempt more quizzes to unlock better performance insights.
+            </p>
+
+            <div class="progress-box">
+                <div class="progress-label">
+                    <span>Quiz Activity</span>
+                    <span>68%</span>
+                </div>
+
+                <div class="progress custom-progress">
+                    <div class="progress-fill" style="width:68%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card premium-section">
+        <div class="section-head">
+            <div>
+                <h2><i class="fa-solid fa-layer-group"></i> Available Quizzes</h2>
+                <p class="small-text section-subtext">
+                    Choose a quiz and start learning
+                </p>
+            </div>
+
+            <div class="pill-badge">
+                {{ quizzes|length }} Quiz{{ quizzes|length|pluralize }}
+            </div>
+        </div>
+
+        {% if quizzes %}
+        <div class="quiz-grid">
+            {% for quiz in quizzes %}
+            <div class="quiz-card premium-quiz-card">
+                <h3>{{ quiz.title }}</h3>
+                <p class="quiz-desc">{{ quiz.description }}</p>
+
+                <div class="quiz-meta">
+                    <div class="meta-item">
+                        <i class="fa-regular fa-clock"></i>
+                        {{ quiz.time_limit }} minutes
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="fa-solid fa-users"></i>
+                        {{ quiz.target_class }}
+                    </div>
+                </div>
+
+                {% if quiz.id in attempted_quiz_ids %}
+                    <button class="btn btn-secondary action-btn" disabled>
+                        <i class="fa-solid fa-check"></i> Already Attempted
+                    </button>
+                {% else %}
+                    <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-primary action-btn">
+                        <i class="fa-solid fa-play"></i> Start Quiz
+                    </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-folder-open"></i>
+            <h3>No quizzes available</h3>
+            <p>No quizzes are available for your class right now.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="section-card premium-section">
+        <div class="section-head">
+            <div>
+                <h2><i class="fa-solid fa-chart-simple"></i> My Results</h2>
+                <p class="small-text section-subtext">
+                    View your quiz scores and overall progress
+                </p>
+            </div>
+
+            <div class="pill-badge success-pill">
+                {{ score_data|length }} Result{{ score_data|length|pluralize }}
+            </div>
+        </div>
+
+        {% if score_data %}
+        <div class="quiz-grid">
+            {% for item in score_data %}
+            <div class="quiz-card premium-score-card">
+                <h3>{{ item.quiz.title }}</h3>
+
+                <p class="score-text">
+                    Score: {{ item.score }} / {{ item.total_marks }}
+                </p>
+
+                <div class="progress-box">
+                    <div class="progress-label">
+                        <span>Performance</span>
+                        <span>{{ item.percentage }}%</span>
+                    </div>
+
+                    <div class="progress custom-progress">
+                        <div class="progress-fill" style="width:{{ item.percentage }}%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-chart-column"></i>
+            <h3>No results yet</h3>
+            <p>Attempt quizzes to see your scores and progress here.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

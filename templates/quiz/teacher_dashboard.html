@@ -1,0 +1,226 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="teacher-dashboard">
+
+    <div class="hero-card dashboard-hero">
+        <div class="hero-content">
+            <h1 class="dashboard-title">
+                <i class="fa-solid fa-chalkboard-user"></i> Teacher Dashboard
+            </h1>
+            <p class="subtitle">
+                Manage quizzes, review manual answers, and track student performance beautifully.
+            </p>
+
+            <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="{% url 'teacher-profile' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-user"></i> My Profile
+                </a>
+
+                <a href="{% url 'logout' %}" class="btn btn-secondary">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-badge">
+            <i class="fa-solid fa-bolt"></i> Smart Control Panel
+        </div>
+    </div>
+
+    <div class="stats-grid premium-stats">
+        <div class="stat-card premium-card">
+            <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
+            <h3>Total Quizzes</h3>
+            <p class="big">{{ quizzes|length }}</p>
+            <div class="small-text">Created and available quizzes</div>
+        </div>
+
+        <div class="stat-card premium-card">
+            <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <h3>Pending Reviews</h3>
+            <p class="big">{{ pending_answers|length }}</p>
+            <div class="small-text">Short and long answers waiting for review</div>
+        </div>
+
+        <div class="stat-card premium-card">
+            <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>Performance</h3>
+            <p class="big">Live</p>
+            <div class="small-text">Track quiz activity and grading</div>
+        </div>
+    </div>
+
+    <div class="chart-card premium-section">
+        <div class="section-head">
+            <div>
+                <h2><i class="fa-solid fa-chart-column"></i> Dashboard Chart</h2>
+                <p class="small-text">Sample visual section for quiz analytics</p>
+            </div>
+            <div class="pill-badge">Analytics View</div>
+        </div>
+
+        <div class="chart-wrap">
+            <div class="bar-col">
+                <div class="bar" style="height: 65%;"></div>
+                <div class="bar-label">Quiz 1</div>
+            </div>
+            <div class="bar-col">
+                <div class="bar" style="height: 85%;"></div>
+                <div class="bar-label">Quiz 2</div>
+            </div>
+            <div class="bar-col">
+                <div class="bar" style="height: 45%;"></div>
+                <div class="bar-label">Quiz 3</div>
+            </div>
+            <div class="bar-col">
+                <div class="bar" style="height: 78%;"></div>
+                <div class="bar-label">Quiz 4</div>
+            </div>
+            <div class="bar-col">
+                <div class="bar" style="height: 58%;"></div>
+                <div class="bar-label">Quiz 5</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card premium-section">
+        <div class="section-head">
+            <div>
+                <h2><i class="fa-solid fa-bolt"></i> Quick Actions</h2>
+                <p class="small-text">Manage your quiz system quickly</p>
+            </div>
+        </div>
+
+        <div class="quiz-grid">
+            <a href="/admin/" class="btn btn-primary action-btn">
+                <i class="fa-solid fa-user-shield"></i> Open Admin Panel
+            </a>
+
+            <a href="{% url 'review_answers' %}" class="btn btn-warning action-btn">
+                <i class="fa-solid fa-check-to-slot"></i> Review Answers
+            </a>
+
+            <a href="{% url 'logout' %}" class="btn btn-secondary action-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+            
+        </div>
+    </div>
+
+    <div class="section-card premium-section">
+        <div class="section-head">
+            <div>
+                <h2><i class="fa-solid fa-layer-group"></i> Available Quizzes</h2>
+                <p class="small-text">All quizzes currently available for students</p>
+            </div>
+            <div class="pill-badge">{{ quizzes|length }} Quiz{{ quizzes|length|pluralize }}</div>
+        </div>
+
+        {% if quizzes %}
+        <div class="quiz-grid">
+            {% for quiz in quizzes %}
+            <div class="quiz-card premium-quiz-card">
+                <div class="section-head" style="margin-bottom: 12px;">
+                    <h3>{{ quiz.title }}</h3>
+                    <div class="pill-badge">
+                        <i class="fa-solid fa-users"></i> {{ quiz.target_class }}
+                    </div>
+                </div>
+
+                <p class="quiz-desc">{{ quiz.description }}</p>
+
+                <div class="quiz-meta">
+                    <div class="meta-item">
+                        <i class="fa-regular fa-clock"></i>
+                        <span>{{ quiz.time_limit }} minutes</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-file-circle-check"></i>
+                        <span>Ready to attempt</span>
+                    </div>
+                </div>
+
+                <div class="progress-box">
+                    <div class="progress-label">
+                        <span>Completion</span>
+                        <span>75%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-fill" style="width:75%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-folder-open"></i>
+            <h3>No quizzes available yet</h3>
+            <p>Create quizzes from the admin panel to get started.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="section-card premium-section">
+        <div class="section-head">
+            <div>
+                <h2><i class="fa-solid fa-list-check"></i> Pending Manual Reviews</h2>
+                <p class="small-text">Answers waiting for teacher grading</p>
+            </div>
+            <div class="pending-badge">{{ pending_answers|length }} Pending</div>
+        </div>
+
+        {% if pending_answers %}
+        <div class="quiz-grid">
+            {% for ans in pending_answers %}
+            <div class="quiz-card premium-score-card">
+                <div class="card-top">
+                    <div class="student-chip">
+                        <i class="fa-solid fa-user"></i> {{ ans.student.username }}
+                    </div>
+                    <div class="marks-chip">
+                        <i class="fa-solid fa-star"></i> {{ ans.question.marks }} Marks
+                    </div>
+                </div>
+
+                <div class="review-info-grid">
+                    <div class="mini-info-box">
+                        <span class="mini-label">Quiz</span>
+                        <p>{{ ans.quiz.title }}</p>
+                    </div>
+                    <div class="mini-info-box">
+                        <span class="mini-label">Type</span>
+                        <p>{{ ans.question.get_question_type_display }}</p>
+                    </div>
+                </div>
+
+                <div class="question-preview-box">
+                    <h3><i class="fa-solid fa-circle-question"></i> Question</h3>
+                    <p>{{ ans.question.question|truncatechars:110 }}</p>
+                </div>
+
+                <div class="answer-preview-box">
+                    <h3><i class="fa-solid fa-file-lines"></i> Answer</h3>
+                    <p>{{ ans.answer_text|default:"No answer submitted."|truncatechars:110 }}</p>
+                </div>
+
+                <a href="{% url 'grade_answer' ans.id %}" class="btn btn-success grade-btn">
+                    <i class="fa-solid fa-marker"></i> Grade Now
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-circle-check"></i>
+            <h3>No pending manual answers</h3>
+            <p>All short and long answers have been reviewed.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

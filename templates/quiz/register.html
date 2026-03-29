@@ -1,0 +1,96 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="form-card login-card premium-card">
+
+        <div class="login-header">
+            <div class="login-badge">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+
+            <h2>Student Registration</h2>
+
+            <p class="small-text">
+                Create your account to attend quizzes and track your learning progress.
+            </p>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter Username"
+                    required
+                >
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter Email Address"
+                    required
+                >
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required
+                >
+            </div>
+
+            <label class="class-label">
+                <i class="fa-solid fa-school"></i> Select Class
+            </label>
+
+            <div class="custom-select-wrapper">
+                <select name="student_class" class="custom-select" required>
+                    <option value="">Choose Class</option>
+                    {% for cls in classes %}
+                        <option value="{{ cls.id }}">{{ cls.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <span class="select-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </span>
+            </div>
+
+            <button type="submit" class="btn btn-register btn-full">
+                <i class="fa-solid fa-user-check"></i>
+                Register
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <p>Already have an account?</p>
+            <a href="{% url 'studentlogin' %}" class="home-link">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Student Login
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

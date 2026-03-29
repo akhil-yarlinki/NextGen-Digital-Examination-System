@@ -1,0 +1,80 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="form-card login-card premium-card teacher-login-card">
+
+        <div class="login-header">
+
+            <div class="login-badge">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+
+            <h2>Teacher Login</h2>
+
+            <p class="small-text">
+                Manage quizzes, review answers, and track student performance.
+            </p>
+
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter Username"
+                    required
+                >
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-success btn-full login-btn">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Login
+            </button>
+             <!-- Forgot Password Button -->
+    <div style="margin-top:14px; text-align:center;">
+        <a href="{% url 'password_reset' %}" class="btn btn-warning btn-full">
+            <i class="fa-solid fa-key"></i> Forgot Password
+        </a>
+    </div>
+        </form>
+
+        <div class="login-footer">
+
+            <p>Go back to homepage</p>
+
+            <a href="{% url 'home' %}" class="home-link">
+                <i class="fa-solid fa-house"></i>
+                Home
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

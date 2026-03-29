@@ -1,0 +1,46 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<div class="form-card premium-card">
+
+    <h2>
+        <i class="fa-solid fa-user-graduate"></i> Student Profile
+    </h2>
+
+    {% if profile %}
+
+        {% if profile.profile_image %}
+            <div style="text-align:center; margin-bottom:15px;">
+                <img src="{{ profile.profile_image.url }}"
+                     width="120"
+                     height="120"
+                     style="border-radius:50%; object-fit:cover; border:3px solid #fff;">
+            </div>
+        {% endif %}
+
+        <p><strong>Username:</strong> {{ profile.user.username }}</p>
+        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+        <p><strong>Phone:</strong> {{ profile.phone|default:"Not provided" }}</p>
+        <p><strong>Class:</strong> {{ profile.student_class }}</p>
+        <p><strong>Address:</strong> {{ profile.address|default:"Not provided" }}</p>
+
+    {% else %}
+
+        <p>Your profile is not created yet.</p>
+
+    {% endif %}
+
+    <div style="margin-top:25px; display:flex; justify-content:center; gap:12px;">
+        
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Go Back
+        </a>
+
+        <a href="{% url 'student-dashboard' %}" class="btn btn-primary">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+
+    </div>
+
+</div>
+{% endblock %}

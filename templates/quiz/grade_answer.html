@@ -1,0 +1,84 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="grade-page">
+    <div class="grade-card">
+
+        <div class="grade-header">
+            <div class="grade-title-wrap">
+                <h2><i class="fa-solid fa-marker"></i> Grade Answer</h2>
+                <p class="grade-subtitle">
+                    Review the student's response and assign marks carefully.
+                </p>
+            </div>
+
+            <div class="max-badge compact-badge">
+                <i class="fa-solid fa-star"></i>
+                Max: {{ answer.question.marks }} Mark{{ answer.question.marks|pluralize }}
+            </div>
+        </div>
+
+        <div class="info-grid compact-info-grid">
+            <div class="info-box compact-info-box">
+                <span class="info-label">Student</span>
+                <p>{{ answer.student.username }}</p>
+            </div>
+
+            <div class="info-box compact-info-box">
+                <span class="info-label">Quiz</span>
+                <p>{{ answer.quiz.title }}</p>
+            </div>
+
+            <div class="info-box compact-info-box">
+                <span class="info-label">Question Type</span>
+                <p>{{ answer.question.get_question_type_display }}</p>
+            </div>
+
+            <div class="info-box compact-info-box">
+                <span class="info-label">Marks Allowed</span>
+                <p>{{ answer.question.marks }}</p>
+            </div>
+        </div>
+
+        <div class="question-box compact-content-box">
+            <h3><i class="fa-solid fa-circle-question"></i> Question</h3>
+            <p>{{ answer.question.question }}</p>
+        </div>
+
+        <div class="answer-box-display compact-content-box">
+            <h3><i class="fa-solid fa-file-lines"></i> Student Answer</h3>
+            <p>{{ answer.answer_text|default:"No answer submitted." }}</p>
+        </div>
+
+        <form method="post" class="grading-form compact-form">
+            {% csrf_token %}
+
+            <label for="marks">Enter Marks</label>
+
+            <input
+                type="number"
+                id="marks"
+                name="marks"
+                min="0"
+                max="{{ answer.question.marks }}"
+                step="1"
+                value="{{ answer.marks_awarded }}"
+                required
+            >
+
+            <div class="helper-text">
+                You can give marks from
+                <strong>0</strong> to
+                <strong>{{ answer.question.marks }}</strong>.
+            </div>
+
+            <button type="submit" class="btn btn-warning save-btn">
+                <i class="fa-solid fa-floppy-disk"></i> Save Marks
+            </button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

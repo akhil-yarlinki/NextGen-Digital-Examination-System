@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+</head>
+
+<body>
+
+<h2>NextGen Digital Examination System</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<label>Select Role</label>
+<select name="role">
+<option value="student">Student</option>
+<option value="teacher">Teacher</option>
+</select>
+
+<br><br>
+
+<label>Username</label>
+<input type="text" name="username">
+
+<br><br>
+
+<label>Password</label>
+<input type="password" name="password">
+
+<br><br>
+
+<button type="submit">Login</button>
+
+</form>
+
+</body>
+</html>

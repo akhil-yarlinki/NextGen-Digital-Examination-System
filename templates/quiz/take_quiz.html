@@ -1,0 +1,192 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+<div class="quiz-wrapper">
+    <div class="section-card quiz-header-card">
+        <div class="quiz-top">
+            <div>
+                <h1 class="dashboard-title">
+                    <i class="fa-solid fa-file-pen"></i> {{ quiz.title }}
+                </h1>
+                <p class="subtitle">{{ quiz.description }}</p>
+            </div>
+
+            <div class="timer-box" id="timerBox">
+                <i class="fa-regular fa-clock"></i>
+                <div>
+                    <span class="timer-label">Time Remaining</span>
+                    <div class="timer-value"><span id="timer">{{ remaining }}</span> sec</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" id="quizForm">
+        {% csrf_token %}
+
+        {% for q in questions %}
+        <div class="question-card beautiful-question-card">
+            <div class="question-header">
+                <h3>
+                    <span class="question-number">{{ forloop.counter }}</span>
+                    {{ q.question }}
+                </h3>
+
+                <span class="marks-badge">
+                    <i class="fa-solid fa-star"></i> {{ q.marks }} Mark{{ q.marks|pluralize }}
+                </span>
+            </div>
+
+            <p class="question-type">
+                <i class="fa-solid fa-layer-group"></i>
+                Type:
+                {% if q.question_type == 'mcq' %}
+                    Multiple Choice
+                {% elif q.question_type == 'short' %}
+                    Short Answer
+                {% elif q.question_type == 'long' %}
+                    Long Answer
+                {% endif %}
+            </p>
+
+            {% if q.question_type == 'mcq' %}
+                <div class="options-grid">
+                    <label class="option-card">
+                        <input type="radio" name="{{ q.id }}" value="{{ q.option1 }}">
+                        <span>{{ q.option1 }}</span>
+                    </label>
+
+                    <label class="option-card">
+                        <input type="radio" name="{{ q.id }}" value="{{ q.option2 }}">
+                        <span>{{ q.option2 }}</span>
+                    </label>
+
+                    <label class="option-card">
+                        <input type="radio" name="{{ q.id }}" value="{{ q.option3 }}">
+                        <span>{{ q.option3 }}</span>
+                    </label>
+
+                    <label class="option-card">
+                        <input type="radio" name="{{ q.id }}" value="{{ q.option4 }}">
+                        <span>{{ q.option4 }}</span>
+                    </label>
+                </div>
+
+            {% elif q.question_type == 'short' %}
+                <textarea
+                    class="answer-box short-answer"
+                    name="{{ q.id }}"
+                    rows="3"
+                    placeholder="Write your short answer here..."
+                ></textarea>
+
+            {% elif q.question_type == 'long' %}
+                <textarea
+                    class="answer-box long-answer"
+                    name="{{ q.id }}"
+                    rows="7"
+                    placeholder="Write your detailed answer here..."
+                ></textarea>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="submit-bar">
+            <button type="submit" class="btn btn-warning submit-btn">
+                <i class="fa-solid fa-paper-plane"></i> Submit Quiz
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+let time = parseInt(document.getElementById("timer").innerText, 10);
+const timerText = document.getElementById("timer");
+const timerBox = document.getElementById("timerBox");
+const quizForm = document.getElementById("quizForm");
+
+function updateTimerStyle() {
+    if (time <= 30) {
+        timerBox.classList.add("timer-danger");
+        timerBox.classList.remove("timer-warning");
+    } else if (time <= 60) {
+        timerBox.classList.add("timer-warning");
+        timerBox.classList.remove("timer-danger");
+    } else {
+        timerBox.classList.remove("timer-warning", "timer-danger");
+    }
+}
+
+updateTimerStyle();
+
+setInterval(function () {
+    if (time > 0) {
+        time--;
+        timerText.innerText = time;
+        updateTimerStyle();
+    } else {
+        quizForm.submit();
+    }
+}, 1000);
+
+// Tab switch detection
+let tabSwitchCount = 0;
+document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+        tabSwitchCount++;
+        alert("⚠️ Warning! You switched the tab.");
+
+        if (tabSwitchCount >= 2) {
+            alert("Exam terminated due to tab switching!");
+            quizForm.submit();
+        }
+    }
+});
+
+// Window blur detection
+window.onblur = function () {
+    alert("⚠️ You left the exam window!");
+};
+
+// Disable right click, copy, paste, cut
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+document.addEventListener("copy", function (e) {
+    e.preventDefault();
+});
+document.addEventListener("paste", function (e) {
+    e.preventDefault();
+});
+document.addEventListener("cut", function (e) {
+    e.preventDefault();
+});
+
+// Fullscreen
+function openFullscreen() {
+    let elem = document.documentElement;
+
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    }
+}
+
+window.onload = function () {
+    openFullscreen();
+};
+
+document.addEventListener("fullscreenchange", function () {
+    if (!document.fullscreenElement) {
+        alert("⚠️ You exited fullscreen! Exam will be submitted.");
+        quizForm.submit();
+    }
+});
+
+</script>
+
+{% endblock %}
